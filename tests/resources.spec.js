@@ -14,6 +14,7 @@ describe('Resources API', () => {
     expect(response.data).toHaveProperty('data');
     expect(Array.isArray(response.data.data)).toBe(true);
     expect(response.data.data.length).toBeGreaterThan(0);
+    
     const resource = response.data.data[0];
     expect(resource).toHaveProperty('id');
     expect(resource).toHaveProperty('name');
@@ -28,6 +29,7 @@ describe('Resources API', () => {
     expect(response.data.data).toHaveProperty('name');
     expect(response.data.data).toHaveProperty('year');
     expect(response.data.data).toHaveProperty('color');
+    
     expect(typeof response.data.data.name).toBe('string');
     expect(typeof response.data.data.year).toBe('number');
     expect(typeof response.data.data.color).toBe('string');
