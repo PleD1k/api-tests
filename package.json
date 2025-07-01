@@ -1,0 +1,28 @@
+{
+  "name": "api-tests",
+  "version": "1.0.0",
+  "description": "��#\u0000 \u0000a\u0000p\u0000i\u0000-\u0000t\u0000e\u0000s\u0000t\u0000s\u0000\r\u0000 \u0000",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha test/*.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PleD1k/api-tests.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/PleD1k/api-tests/issues"
+  },
+  "homepage": "https://github.com/PleD1k/api-tests#readme",
+  "devDependencies": {
+    "chai": "^5.2.0",
+    "mocha": "^11.7.1",
+    "selenium-webdriver": "^4.34.0"
+  },
+  "dependencies": {
+    "webdriverio": "^9.16.2"
+  }
+}
