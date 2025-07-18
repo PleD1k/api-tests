@@ -1,42 +1,58 @@
-const axios = require('../utils/axios.config');
-const endpoints = require('../utils/endpoints');
-const testData = require('../test-data/users.data');
+const axios = require("../utils/axios.config");
+const endpoints = require("../utils/endpoints");
+const testData = require("../test-data/users.data");
+const Ajv = require("ajv");
+const createUserSchema = require("../schemes/create-user.json");
+const loginUserSchema = require("../schemes/login-user.json");
 
-describe('Auth API', () => {
+const ajv = new Ajv();
+
+describe("Auth API", () => {
   beforeAll(() => {
     if (!process.env.BASE_URL) {
-      throw new Error('BASE_URL is not found');
+      throw new Error("BASE_URL is not found");
     }
   });
 
-  test('POST register should register successfully', async () => {
-    const response = await axios.post(endpoints.auth.register, testData.registerSuccess);
+  test("POST register should register successfully", async () => {
+    const validate = ajv.compile(createUserSchema);
+    const response = await axios.post(
+      endpoints.auth.register,
+      testData.registerSuccess
+    );
     expect(response.status).toBe(200);
-    expect(response.data).toHaveProperty('id');
-    expect(response.data).toHaveProperty('token');
+    const valid = validate(response.data);
+    expect(valid).toBe(true);
+    if (!valid) console.log(validate.errors);
   });
 
-  test('POST register should fail without password', async () => {
+  test("POST register should fail without password", async () => {
     try {
       await axios.post(endpoints.auth.register, testData.registerFail);
     } catch (error) {
       expect(error.response.status).toBe(400);
-      expect(error.response.data).toHaveProperty('error', 'Missing password');
+      expect(error.response.data).toHaveProperty("error", "Missing password");
     }
   });
 
-  test('POST login should login successfully', async () => {
-    const response = await axios.post(endpoints.auth.login, testData.loginSuccess);
+  test("POST login should login successfully", async () => {
+    const validate = ajv.compile(loginUserSchema);
+    const response = await axios.post(
+      endpoints.auth.login,
+      testData.loginSuccess
+    );
     expect(response.status).toBe(200);
-    expect(response.data).toHaveProperty('token');
+    const valid = validate(response.data);
+    expect(valid).toBe(true);
+    if (!valid) console.log(validate.errors);
   });
 
-  test('POST login should fail without password', async () => {
+  test("POST login should fail without password", async () => {
     try {
       await axios.post(endpoints.auth.login, testData.loginFail);
     } catch (error) {
       expect(error.response.status).toBe(400);
-      expect(error.response.data).toHaveProperty('error', 'Missing password');
+      expect(error.response.data).toHaveProperty("error", "Missing password");
     }
   });
 });

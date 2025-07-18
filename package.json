@@ -21,6 +21,8 @@
     "dotenv": "^16.5.0"
   },
   "devDependencies": {
+    "ajv": "^8.17.1",
+    "ajv-formats": "^3.0.1",
     "jest": "^30.0.3"
   }
 }

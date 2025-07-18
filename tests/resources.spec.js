@@ -1,37 +1,34 @@
-const axios = require('../utils/axios.config');
-const endpoints = require('../utils/endpoints');
+const axios = require("../utils/axios.config");
+const endpoints = require("../utils/endpoints");
+const Ajv = require("ajv");
+const resourcesListSchema = require("../schemes/resources-list.json");
+const resourceSingleSchema = require("../schemes/resource-single.json");
 
-describe('Resources API', () => {
+const ajv = new Ajv();
+
+describe("Resources API", () => {
   beforeAll(() => {
     if (!process.env.BASE_URL) {
-      throw new Error('BASE_URL is not found');
+      throw new Error("BASE_URL is not found");
     }
   });
 
-  test('GET unknown should return list of resources', async () => {
+  test("GET unknown should return list of resources", async () => {
+    const validate = ajv.compile(resourcesListSchema);
     const response = await axios.get(endpoints.resources.list);
     expect(response.status).toBe(200);
-    expect(response.data).toHaveProperty('data');
-    expect(Array.isArray(response.data.data)).toBe(true);
-    expect(response.data.data.length).toBeGreaterThan(0);
-    
-    const resource = response.data.data[0];
-    expect(resource).toHaveProperty('id');
-    expect(resource).toHaveProperty('name');
-    expect(resource).toHaveProperty('year');
-    expect(resource).toHaveProperty('color');
+    const valid = validate(response.data);
+    expect(valid).toBe(true);
+    if (!valid) console.log(validate.errors);
   });
 
-  test('GET unknown/7 should return specific resource 7', async () => {
+  test("GET unknown/7 should return specific resource 7", async () => {
+    const validate = ajv.compile(resourceSingleSchema);
     const response = await axios.get(endpoints.resources.single(7));
     expect(response.status).toBe(200);
-    expect(response.data.data).toHaveProperty('id', 7);
-    expect(response.data.data).toHaveProperty('name');
-    expect(response.data.data).toHaveProperty('year');
-    expect(response.data.data).toHaveProperty('color');
-    
-    expect(typeof response.data.data.name).toBe('string');
-    expect(typeof response.data.data.year).toBe('number');
-    expect(typeof response.data.data.color).toBe('string');
+    const valid = validate(response.data);
+    expect(valid).toBe(true);
+    if (!valid) console.log(validate.errors);
+    expect(response.data.data.id).toBe(7);
   });
 });
