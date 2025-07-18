@@ -2,7 +2,7 @@ const axios = require("../utils/axios.config");
 const endpoints = require("../utils/endpoints");
 const testData = require("../test-data/users.data");
 
-const Ajv = require("ajv");
+const Ajv = require("ajv"); //вот это подсматривал ибо не понял че это mail и date-time не пашет
 const addFormats = require("ajv-formats");
 
 const usersListSchema = require("../schemes/users-list.json");
